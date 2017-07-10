@@ -4,7 +4,7 @@ class data_model extends CI_Model {
 
     public function get($params) {
 
-        /* This Function Parameter 
+        /* This Function Parameter
           $params = new stdClass();
           $params->dest_table_as = 'table_name';
           $params->select_values = array();
@@ -36,7 +36,7 @@ class data_model extends CI_Model {
         if (isset($params->limit)) {
             $limit = $params->limit;
         }
-        
+
         foreach ($select_values as $each_select) {
             $select[] = $this->db->select($each_select);
         }
@@ -53,13 +53,13 @@ class data_model extends CI_Model {
                 $where = $this->db->where($each_where['where_column'], $each_where['where_value']);
             }
         }
-        
+
         if ((isset($where_tables_like))) {
             foreach ($where_tables_like as $each_where) {
                 $where_like = $this->db->like($each_where['where_column'], $each_where['where_value']);
             }
         }
-        
+
         if ((isset($or_where_tables))) {
             foreach ($or_where_tables as $each_where) {
                 $or_where = $this->db->or_where($each_where['where_column'], $each_where['where_value']);
@@ -80,6 +80,7 @@ class data_model extends CI_Model {
         $res = $query->result();
         if ($query == TRUE) {
             $response = OK_STATUS;
+            // $data = array("response" => $response, "results" => $res, 'sql'=>$this->db->last_query());
             $data = array("response" => $response, "results" => $res);
         } else {
             $response = FAIL_STATUS;
@@ -126,7 +127,8 @@ class data_model extends CI_Model {
             $data = array("response" => $response,);
         } else {
             $response = FAIL_STATUS;
-            $data = array("response" => $response, "results" => $this->db->last_query());
+            // $data = array("response" => $response, "results" => $this->db->last_query());
+            $data = array("response" => $response);
         }
         return $data;
     }

@@ -7,7 +7,7 @@ function setpassword() {
 
 function Add() {
   var nama = $('#nama').val();
-  var input = new FormData();  
+  var input = new FormData();
   input.append('nama', nama);
   var post_url = 'pengurus_tpq/add_submit';
   ServerPost(post_url,input,true);
@@ -25,7 +25,7 @@ function Put() {
 }
 
 function Delete(id) {
-  $('#deleteTpqModal').modal('show');
+  $('#deleteModal').modal('show');
   $('#id').val(id);
 }
 
@@ -47,32 +47,14 @@ function ChangePass(){
 
 }
 
-function DeleteTpqProcess() {
+function DeleteProcess() {
   var id = $('#id').val();
-  $.ajax({
-    url: url + 'tpq/delete/' + id,
-    method: 'GET',
-    dataType: 'json',
-    cache: false,
-    contentType: false,
-    processData: false,
-    success: function (response) {
-      if (response.response == 'OK') {
-        $('#deleteTpqModal').modal('hide');
-        $.notify({
-          message: '<i class="mdi mdi-check-all"></i> ' + response.message,
-        }, {type: 'success'})
-        setTimeout(function ()
-        {
-          location.reload();
-        }, 1000);
-      } else {
-        $.notify({
-          message: '<i class="mdi mdi-close"></i> ' + response.message,
-        }, {type: 'danger'})
-      }
-    }
-  });
+  var post_url = 'pengurus_tpq/delete';
+  var input = new FormData();
+  input.append('id', id);
+  $('#deleteModal').modal('hide');
+  ServerPost(post_url,input,true);
+
 }
 
 </script>

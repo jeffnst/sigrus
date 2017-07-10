@@ -38,7 +38,7 @@ class pengurus_tpq extends admin
     }
     $this->data['record'] = $record;
     $this->data['data_table'] = true;
-    parent::display('admin/pengurus_tpq/data', '',true);
+    parent::display('admin/pengurus_tpq/data', 'admin/pengurus_tpq/function',true);
   }
 
   public function detail()
@@ -115,22 +115,23 @@ class pengurus_tpq extends admin
 
       public function delete_submit()
       {
-        $id = $this->uri->segment(4);
+        $id = $this->input->post('id');
+
         $params_delete = new stdClass();
-        $where1 = array("where_column" => 'id', "where_value" => $id);
+        $where1 = array("where_column" => 'id_kategori_pengurus_tpq', "where_value" => $id);
         $params_delete->where_tables = array($where1);
         $params_delete->table = 'tb_pengurus_tpq';
         $delete = $this->data_model->delete($params_delete);
 
-        $params_delete_akun = new stdClass();
-        $params_delete_akun->table = 'tb_akun';
-        $where1 = array("where_column" => 'level', "where_value" => 'T');
-        $where2 = array("where_column" => 'id_level', "where_value" => $id);
-        $params_delete_akun->where_tables = array($where1, $where2);
-        $delete_akun = $this->data_model->delete($params_delete_akun);
+        $params_delete = new stdClass();
+        $where1 = array("where_column" => 'id', "where_value" => $id);
+        $params_delete->where_tables = array($where1);
+        $params_delete->table = 'tb_kategori_pengurus_tpq';
+        $delete = $this->data_model->delete($params_delete);
 
         if ($delete['response'] == OK_STATUS) {
-          $result = response_success();
+          $data = array("link" => base_url() . 'admin/pengurus_tpq/data');
+          $result = get_success($data);
         } else {
           $result = response_fail();
         }

@@ -76,17 +76,20 @@ class tpq extends admin
     $where = array("where_column" => 'tpq.link', "where_value" => $parameter);
     $params->where_tables = array($where);
     $get_data_tpq = $this->data_model->get($params);
+    // print_r($get_data_tpq);exit();
     if ($get_data_tpq["results"][0] != "") {
       $get_kat_pgrs = $this->get_kat_pgrs();
       $get_pc = $this->get_pc();
       $params_pgrs = new stdClass();
-      $params_pgrs->dest_table_as = 'tb_pengurus_tpq as pgrs_tpq';
-      $params_pgrs->select_values = array('kat_pgrs.id as id_kat_pgrs', 'kat_pgrs.nama as nama_kat_pgrs', 'pgrs_tpq.nama as nama_pgrs');
-      $join1 = array("join_with" => 'tb_kategori_pengurus_tpq as kat_pgrs', "join_on" => 'pgrs_tpq.id_kategori_pengurus_tpq = kat_pgrs.id', "join_type" => '');
+      $params_pgrs->dest_table_as = 'tb_kategori_pengurus_tpq as kat_pgrs_tpq';
+      $params_pgrs->select_values = array('kat_pgrs_tpq.id as id_kat_pgrs', 'kat_pgrs_tpq.nama as nama_kat_pgrs', 'pgrs_tpq.nama as nama_pgrs');
+      $join1 = array("join_with" => 'tb_pengurus_tpq as pgrs_tpq', "join_on" => 'pgrs_tpq.id_kategori_pengurus_tpq = kat_pgrs_tpq.id', "join_type" => 'LEFT OUTER');
+      $where1 = array("where_column" => 'pgrs_tpq.id_tpq', "where_value" => $get_data_tpq['results'][0]->id_tpq);
+      $where2 = array("where_column" => 'pgrs_tpq.id', "where_value" => NULL);
       $params_pgrs->join_tables = array($join1);
-      $params_pgrs->where_tables = array(array("where_column" => 'pgrs_tpq.id_tpq', "where_value" => $get_data_tpq['results'][0]->id_tpq));
-      $params_pgrs->or_where_tables = array();
-      $get_pgrs = $this->data_model->get($params_pgrs);
+      $params_pgrs->where_tables = array($where1);
+      $params_pgrs->or_where_tables = array($where2);
+      $get_pgrs = $this->data_model->get($params_pgrs);      
       $this->data['title_page'] = "Detail TPQ";
       $logo = $get_data_tpq['results'][0]->logo;
       $cover = $get_data_tpq['results'][0]->cover;
